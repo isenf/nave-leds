@@ -1,0 +1,5 @@
+name: nave_leds
+dependencies:
+    - python=3.14
+    - matplotlib
+    - numpy
