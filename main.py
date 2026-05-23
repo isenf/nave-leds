@@ -32,19 +32,20 @@ arrays = {
 for i in range(len(x)):
     arr = list(arrays.items())[i][1]
 
-    for j in range(leds_diag):
-        a = j / (leds_diag - 1)
+    for j in range(1, leds_diag + 1):
+        a = j / (leds_diag + 1)
         px = centro_x + a * (x[i] - centro_x)
         py = centro_y + a * (y[i] - centro_y)
-        arr.append((px, py))
+        arr.append([px, py])
 
-    for j in range(leds_lat):
-        a = (j + 1) / leds_lat
+    for j in range(1, leds_lat + 1):
+        a = j / (leds_lat + 1)
         px = x[i] + a * (x[(i + 1) % len(x)] - x[i])
         py = y[i] + a * (y[(i + 1) % len(y)] - y[i])
-        arr.append((px, py))
+        arr.append([px, py])
 
-for k, v in arrays.items():
+arrays_np = {}
+for _, v in arrays.items():
     v = np.array(v)
 
 ax.set_xticks([])
@@ -60,6 +61,10 @@ ax.plot(centro_x, centro_y, marker='o', markersize=0)
 
 for i in range(len(x)):
     ax.plot([centro_x, x[i]], [centro_y, y[i]], color='.75', linewidth=2)
+
+for i, (k, v) in enumerate(arrays.items()):
+    if(len(v) > 0):
+        ax.scatter(np.array(v)[:, 0], np.array(v)[:, 1])
 
 
 ax.set_aspect('equal')
