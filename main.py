@@ -7,9 +7,8 @@ angs_rad = np.deg2rad(angs)
 raio = 1
 centro_x, centro_y = 0, 0
 
-
 x = centro_x + raio * np.cos(angs_rad)
-y = centro_x + raio * np.sin(angs_rad)
+y = centro_y + raio * np.sin(angs_rad)
 
 hex_x = np.append(x, x[0])
 hex_y = np.append(y, y[0])
@@ -56,15 +55,16 @@ ax.set_yticklabels([])
 for i in ['top', 'right', 'bottom', 'left']:
     ax.spines[i].set_visible(False)
 
-ax.plot(hex_x, hex_y, color='.75', linewidth=2, marker='o', markersize=0)
-ax.plot(centro_x, centro_y, marker='o', markersize=0)
+ax.plot(hex_x, hex_y, color='.75', linewidth=1, marker='o', markersize=0)
 
 for i in range(len(x)):
-    ax.plot([centro_x, x[i]], [centro_y, y[i]], color='.75', linewidth=2)
+    ax.plot([centro_x, x[i]], [centro_y, y[i]], color='.75', linewidth=.5)
 
 for i, (k, v) in enumerate(arrays.items()):
     if(len(v) > 0):
-        ax.scatter(np.array(v)[:, 0], np.array(v)[:, 1])
+        ax.scatter(np.array(v)[:, 0], np.array(v)[:, 1], 
+                   edgecolors='black', color='none', s=15, linewidth=.5,
+                   zorder=10)
 
 
 ax.set_aspect('equal')
