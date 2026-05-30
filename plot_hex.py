@@ -25,6 +25,9 @@ def plot_hex(ax, hex_data, led_positions=None, lines_color='.75', lines_tickness
 
     ax.plot(hex_x, hex_y, color=perimeter_color, linewidth=perimeter_tickness)
 
+    for line in hex_data['center_vertices']:
+        ax.plot(line[0], line[1], color=lines_color, linewidth=lines_tickness)
+
     if(led_positions):
         for i, (key, points) in enumerate(led_positions.items()):
             if(len(points) > 0):
@@ -38,7 +41,7 @@ def create_figure(size=(6, 6)):
     
     """
 
-    fig, ax = plt.subplots(fig_size=size)
+    fig, ax = plt.subplots(figsize=size)
     config_plot(ax)
     return fig, ax
 

@@ -1,6 +1,6 @@
 import numpy as np
 
-def calc_vertices_hex(radius:int=1, center=(0, 0), ang_degrees=None):
+def calc_vertices_hex(radius:float=1.0, center=(0, 0), ang_degrees=None):
     """
     Calcula os vértices de um hexágono regular
 
@@ -13,14 +13,14 @@ def calc_vertices_hex(radius:int=1, center=(0, 0), ang_degrees=None):
         x, y: arrays com as coordenadas x e y dos vértices
     """
     
-    if(ang_degrees == None):
+    if(ang_degrees is None):
         ang_degrees = [0, 60, 120, 180, 240, 300]
 
     ang_rad = np.deg2rad(ang_degrees)
     center_x, center_y = center
 
-    x = center_x + radius * ang_rad
-    y = center_y + radius * ang_rad
+    x = center_x + radius * np.cos(ang_rad)
+    y = center_y + radius * np.sin(ang_rad)
 
     return x, y
 
@@ -46,11 +46,11 @@ def calc_pos_leds(vertices_x, vertices_y, center=(0, 0), leds_lat=18, leds_diag=
         for j in range(1, leds_lat + 1):
             # leds na lateral (entre os vértices)
             a = j / (leds_lat + 1)
-            px = vertices_x[i] + a * [vertices_x[(i + 1) % num_vertices] - vertices_x[i]]
-            py = vertices_y[i] + a * [vertices_y[(i + 1) % num_vertices] - vertices_y[i]]
+            px = vertices_x[i] + a * (vertices_x[(i + 1) % num_vertices] - vertices_x[i])
+            py = vertices_y[i] + a * (vertices_y[(i + 1) % num_vertices] - vertices_y[i])
             positions[chr(65+i)].append([px, py])
 
-    for key in positions.keys:
+    for key in positions:
         if(positions[key]):
             positions[key] = np.array(positions[key])
 
