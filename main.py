@@ -1,73 +1,21 @@
 import matplotlib.pyplot as plt
-import numpy as np
+from calc_positions import calc_vertices_hex, calc_lines_hex, calc_pos_leds
+from plot_hex import create_figure, plot_hex
 
-angs = [0, 60, 120, 180, 240, 300]
-angs_rad = np.deg2rad(angs)
+RADIUS = 1
+CENTER = (0, 0)
+LEDS_LAT = 18
+LEDS_DIAG = 19
 
-raio = 1
-centro_x, centro_y = 0, 0
+vertices_x, vertices_y = calc_vertices_hex(radius=RADIUS, center=CENTER)
 
-x = centro_x + raio * np.cos(angs_rad)
-y = centro_y + raio * np.sin(angs_rad)
+led_pos = calc_pos_leds(vertices_x, vertices_y, center=CENTER, 
+                        leds_lat=LEDS_LAT, leds_diag=LEDS_DIAG)
 
-hex_x = np.append(x, x[0])
-hex_y = np.append(y, y[0])
+hex_data = calc_lines_hex(vertices_x, vertices_y, center=CENTER)
 
-fig, ax = plt.subplots(figsize=(6, 6))
-
-leds_lat = 18
-leds_diag = 19
-
-A, B, C, D, E, F = [], [], [], [], [], []
-arrays = {
-    'A': A, 
-    'B': B, 
-    'C': C, 
-    'D': D, 
-    'E': E, 
-    'F': F
-}
-
-for i in range(len(x)):
-    arr = list(arrays.items())[i][1]
-
-    for j in range(1, leds_diag + 1):
-        a = j / (leds_diag + 1)
-        px = centro_x + a * (x[i] - centro_x)
-        py = centro_y + a * (y[i] - centro_y)
-        arr.append([px, py])
-
-    for j in range(1, leds_lat + 1):
-        a = j / (leds_lat + 1)
-        px = x[i] + a * (x[(i + 1) % len(x)] - x[i])
-        py = y[i] + a * (y[(i + 1) % len(y)] - y[i])
-        arr.append([px, py])
-
-arrays_np = {}
-for _, v in arrays.items():
-    v = np.array(v)
-
-ax.set_xticks([])
-ax.set_yticks([])
-ax.set_xticklabels([])
-ax.set_yticklabels([])
-
-for i in ['top', 'right', 'bottom', 'left']:
-    ax.spines[i].set_visible(False)
-
-ax.plot(hex_x, hex_y, color='.75', linewidth=1, marker='o', markersize=0)
-
-for i in range(len(x)):
-    ax.plot([centro_x, x[i]], [centro_y, y[i]], color='.75', linewidth=.5)
-
-for i, (k, v) in enumerate(arrays.items()):
-    if(len(v) > 0):
-        ax.scatter(np.array(v)[:, 0], np.array(v)[:, 1], 
-                   edgecolors='black', color='none', s=15, linewidth=.5,
-                   zorder=10)
-
-
-ax.set_aspect('equal')
+fig, ax = create_figure(size=(6, 6))
+plot_hex(ax, hex_data, led_pos)
 
 plt.show()
 
