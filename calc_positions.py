@@ -26,7 +26,18 @@ def calc_vertices_hex(radius:float=1.0, center=(0, 0), ang_degrees=None):
 
 def calc_pos_leds(vertices_x, vertices_y, center=(0, 0), leds_lat=18, leds_diag=19):
     """
-    
+    Calcula a posição dos leds ao longo da lateral e da diagonal
+
+    Args:
+        vertices_x: posição do vértice no eixo x
+        vertices_y: posição do vértice no eixo y
+        center: tupla (x, y) do centro do hexágono
+        leds_lat: quantidade de leds na lateral
+        leds_diag: quantidade de leds na diagonal
+
+    Returns:
+        positions: retorna um dicionário contendo uma letra para identificar cada conjunto de led (leds_lat + leds_diag)
+        e as posições dos leds nos eixos x e y    
     """
 
     center_x, center_y = center
@@ -58,7 +69,15 @@ def calc_pos_leds(vertices_x, vertices_y, center=(0, 0), leds_lat=18, leds_diag=
 
 def calc_lines_hex(vertices_x, vertices_y, center=(0, 0)):
     """
-    
+    Calcula as linhas do hexágono
+
+    Args:
+        vertices_x: posição do vértice no eixo x
+        vertices_y: posição do vértice no eixo y
+        center: tupla (x, y) do centro do hexágono
+
+    Returns:
+        retorna um dicionário com coordenadas para plotagem
     """
 
     center_x, center_y = center
