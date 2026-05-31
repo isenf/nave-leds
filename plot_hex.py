@@ -21,8 +21,8 @@ def config_plot(ax, remove_spines=True, remove_ticks=True):
         for i in ['top', 'right', 'bottom', 'left']:
             ax.spines[i].set_visible(False)
 
-def plot_hex(ax, hex_data, led_positions=None, lines_color='.75', lines_tickness=0.5,
-             perimeter_color='.75', perimeter_tickness=1, point_size=15, point_edge_tickness=0.5):
+def plot_hex(ax, hex_data, led_positions, led_color, lines_color='.75', lines_tickness=0.5,
+             perimeter_color='.75', perimeter_tickness=1, point_size=5, point_edge_tickness=0.5):
     """
     Plota o hexágono e os leds
 
@@ -44,11 +44,11 @@ def plot_hex(ax, hex_data, led_positions=None, lines_color='.75', lines_tickness
     for line in hex_data['center_vertices']:
         ax.plot(line[0], line[1], color=lines_color, linewidth=lines_tickness)
 
-    if(led_positions):
-        for i, (key, points) in enumerate(led_positions.items()):
-            if(len(points) > 0):
-                ax.scatter(points[:, 0], points[:, 1], edgecolors='black', facecolors='none',
-                           s=point_size, linewidth=point_edge_tickness, zorder=10)
+    for led_letter, positions in led_positions.items():
+        for pos in positions:
+            ax.plot(pos[0], pos[1], marker='o', color=led_color[led_letter], 
+                    markersize=point_size, markeredgecolor='black', 
+                    markeredgewidth=point_edge_tickness)
 
     ax.set_aspect('equal')
 
