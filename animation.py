@@ -26,11 +26,11 @@ def get_path_indices(led_pos:dict, keys:list, start_idx:int, end_idx:int) -> lis
     all_positions = []
 
     for vertex in led_pos.keys():
-        print(vertex)
+        # print(vertex)
         if vertex in keys:
             all_positions.extend(led_pos[vertex][start_idx:end_idx + 1])
 
-        print(len(all_positions), "  aaaaa")
+        # print(len(all_positions), "  aaaaa")
 
    #  positions.append(all_positions[start_idx*2:end_idx*2 + 1])
     # for i in range(1, len(led_pos.keys()) + 1):
@@ -72,3 +72,46 @@ def create_animation(hex_data, led_pos, led_color, start_idx=19, end_idx=37, num
                          repeat=True)
 
     return anim
+
+def anim_arrow_hor(hex_data, led_pos, led_color, left=True):
+
+    if left:
+        paths = [
+            get_path_indices(led_pos, ['D'], 1, 18),
+            (get_path_indices(led_pos, ['C'], 19, 37)),
+            (get_path_indices(led_pos, ['D'], 19, 37))[::-1]
+        ]
+    else:
+        paths = [
+            get_path_indices(led_pos, ['A'], 1, 18),
+            (get_path_indices(led_pos, ['A'], 19, 37))[::-1],
+            (get_path_indices(led_pos, ['F'], 19, 37))
+        ]
+
+    fig, ax = create_figure(size=(6,6))
+    plot_hex(ax, hex_data, led_pos, led_color)
+
+    p_a, = ax.plot([], [], 'o', color='red', markersize=5,
+                     markeredgecolor='black', markeredgewidth=.5)
+    p_b, = ax.plot([], [], 'o', color='green', markersize=5,
+                     markeredgecolor='black', markeredgewidth=.5)
+    p_c, = ax.plot([], [], 'o', color='blue', markersize=5,
+                     markeredgecolor='black', markeredgewidth=.5)
+    
+    def update(frame):
+        i = frame % len(paths[0])
+
+        p_a.set_data([paths[0][i][0]], [paths[0][i][1]])
+        p_b.set_data([paths[1][i][0]], [paths[1][i][1]])    
+        p_c.set_data([paths[2][i][0]], [paths[2][i][1]])
+
+        return p_a, p_b, p_c
+    
+    anim = FuncAnimation(fig, update,
+                         frames=len(paths[0]),
+                         interval=200,
+                         blit=True,
+                         repeat=False)
+    
+    return anim
+
