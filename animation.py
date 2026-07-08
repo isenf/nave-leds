@@ -115,3 +115,80 @@ def anim_arrow_hor(hex_data, led_pos, led_color, left=True):
     
     return anim
 
+
+def anim_arrow_ver(hex_data, led_pos, led_color, up=True):
+
+    if up:
+        temp = get_path_indices(led_pos, 'C', 0, 18)
+        paths = [
+            get_path_indices(led_pos, 'B', 0,  27),
+            temp + get_path_indices(led_pos, 'B', 28, 37)[::-1]
+        ]
+    else:
+        temp = get_path_indices(led_pos, 'F', 0, 18)
+        paths = [
+            get_path_indices(led_pos, 'E', 0,  27),
+            temp + get_path_indices(led_pos, 'E', 28, 37)[::-1]
+        ]
+
+    fig, ax = create_figure(size=(6,6))
+    plot_hex(ax, hex_data, led_pos, led_color)
+
+    p_a, = ax.plot([], [], 'o', color='red', markersize=5,
+                     markeredgecolor='black', markeredgewidth=.5)
+    p_b, = ax.plot([], [], 'o', color='green', markersize=5,
+                     markeredgecolor='black', markeredgewidth=.5)
+    
+    def update(frame):
+        i = frame % len(paths[0])
+
+        p_a.set_data([paths[0][i][0]], [paths[0][i][1]])
+        p_b.set_data([paths[1][i][0]], [paths[1][i][1]])
+
+        return p_a, p_b
+    
+    anim = FuncAnimation(fig, update,
+                         frames=len(paths[0]),
+                         interval=200,
+                         blit=True,
+                         repeat=False)
+    
+    return anim
+
+
+def anim_arrow_ver2(hex_data, led_pos, led_color, up=True):
+    if up:
+        paths = [
+            get_path_indices(led_pos, 'A', 19,  37) + get_path_indices(led_pos, 'B', 19,  27),
+            get_path_indices(led_pos, 'C', 19, 37)[::-1] + get_path_indices(led_pos, 'B', 28, 37)[::-1]
+        ]
+    else:
+        paths = [
+            get_path_indices(led_pos, 'D', 19,  37) + get_path_indices(led_pos, 'E', 19,  27),
+            get_path_indices(led_pos, 'F', 19, 37)[::-1] + get_path_indices(led_pos, 'E', 28, 37)[::-1]
+        ]
+
+    fig, ax = create_figure(size=(6,6))
+    plot_hex(ax, hex_data, led_pos, led_color)
+
+    p_a, = ax.plot([], [], 'o', color='red', markersize=5,
+                     markeredgecolor='black', markeredgewidth=.5)
+    p_b, = ax.plot([], [], 'o', color='green', markersize=5,
+                     markeredgecolor='black', markeredgewidth=.5)
+    
+    def update(frame):
+        i = frame % len(paths[0])
+
+        p_a.set_data([paths[0][i][0]], [paths[0][i][1]])
+        p_b.set_data([paths[1][i][0]], [paths[1][i][1]])
+
+        return p_a, p_b
+    
+    anim = FuncAnimation(fig, update,
+                         frames=len(paths[0]),
+                         interval=200,
+                         blit=True,
+                         repeat=False)
+    
+    return anim
+
