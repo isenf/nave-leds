@@ -21,6 +21,7 @@ const char name_leds[] = {'A', 'B', 'C', 'D', 'E', 'F'};
 struct StripBase{
     virtual void begin() = 0;
     virtual void setBrightness(uint8_t) = 0;
+    virtual void setPixel(uint8_t, CRGB) = 0;
     virtual void fill(CRGB) = 0;
     virtual void show() = 0;
     virtual void clear() = 0;
@@ -62,6 +63,10 @@ struct LEDStrip : public StripBase{
 
 };
 
+
+// functions prototypes
+void arrowHor(CRGB color, bool left);
+void arrowVer(CRGB color, bool up);
 
 
 
